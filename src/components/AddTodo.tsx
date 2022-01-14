@@ -25,6 +25,7 @@ const AddTodo: React.FC<PropTypes> = ({
     };
     await doFetch(sendData);
     setInputVisibility(false);
+    setInputData("");
     await handleRefetch();
   };
 
