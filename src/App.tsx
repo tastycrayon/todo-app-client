@@ -20,7 +20,7 @@ function App() {
   return (
     <Container>
       <>
-        <Header />
+        <Header handleRefetch={refecthTodos} />
         {error && <div>{JSON.stringify(error)}</div>}
         {loading && <Spinner />}
         {!loading && !error && data?.todos && (
