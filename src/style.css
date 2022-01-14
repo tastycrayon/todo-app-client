@@ -247,6 +247,9 @@ body {
 .p-10 {
   padding: 10rem;
 }
+.py-11 {
+  padding: 11rem 0;
+}
 .px-3 {
   margin: 0 3rem;
 }
