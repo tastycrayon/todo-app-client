@@ -9,7 +9,7 @@ interface PropTypes {
 
 const Todos: React.FC<PropTypes> = ({ items, handleRefetch }: PropTypes) => {
   return (
-    <div className="todoContainer">
+    <div className="todoContainer w-100">
       <ul className="todoWrap w-100">
         {items.map((todo: ITodo) => (
           <Todo handleRefetch={handleRefetch} key={todo._id} item={todo} />
