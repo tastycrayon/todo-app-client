@@ -27,14 +27,12 @@ const Todos: React.FC<PropTypes> = ({ items, handleRefetch }: PropTypes) => {
       <div className="filterWrap hFlex p-1">
         <span>Filter ({filteredTodos?.length || 0})</span>
         <select
-          value={filter}
           onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
             setfilter(e.target.value)
           }
+          defaultValue="-1"
         >
-          <option value="" selected>
-            All
-          </option>
+          <option value="-1">All</option>
           <option value="1">Completed</option>
           <option value="0">Incomplete</option>
         </select>
