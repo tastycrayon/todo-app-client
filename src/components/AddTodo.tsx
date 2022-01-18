@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import useFetch from "../hooks/Fetch";
+import { IHandleRefetchTypes } from "../interfaces/Fetch";
 
 interface PropTypes {
   disbaled: boolean;
-  handleRefetch: () => Promise<void>;
+  handleRefetch: IHandleRefetchTypes;
 }
 
 const AddTodo: React.FC<PropTypes> = ({

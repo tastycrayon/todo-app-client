@@ -5,28 +5,27 @@ import Header from "./components/Header";
 import Spinner from "./components/Spinner";
 import Todos from "./components/Todos";
 import useFetch from "./hooks/Fetch";
-import { ITodo } from "./interfaces/Todo";
+import { IFetchAllDataTypes } from "./interfaces/Fetch";
 import "./style.css";
 
-interface IFetchData {
-  todos: ITodo[];
-  total: number;
-}
-
 function App() {
-  const query = useFetch<IFetchData>("todos");
-  const { data, loading, error, doFetch: refecthTodos } = query;
+  const query = useFetch<IFetchAllDataTypes>("todos");
+  const { data, loading, error, doFetch: refetchTodos, setData } = query;
 
   return (
     <Container>
       <>
-        <Header handleRefetch={refecthTodos} />
+        <Header handleRefetch={refetchTodos} />
         {error && <div>{JSON.stringify(error)}</div>}
         {loading && <Spinner />}
         {!loading && !error && data?.todos && (
-          <Todos handleRefetch={refecthTodos} items={data?.todos} />
+          <Todos
+            handleRefetch={refetchTodos}
+            items={data?.todos}
+            setItems={setData}
+          />
         )}
-        <AddTodo handleRefetch={refecthTodos} disbaled={!!(loading || error)} />
+        <AddTodo handleRefetch={refetchTodos} disbaled={!!(loading || error)} />
       </>
     </Container>
   );

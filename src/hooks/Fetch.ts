@@ -1,17 +1,12 @@
 import { useState, useEffect } from "react";
+import { IFetchStateType } from "../interfaces/Fetch";
 
-export default function useFetch<dataType>(
+export default function useFetch<StateTypes>(
   url: string,
   data?: {},
   lazy = false
 ) {
-  type stateType = {
-    data: undefined | dataType;
-    loading: boolean;
-    error: undefined | string;
-  };
-
-  const [state, setState] = useState<stateType>({
+  const [state, setState] = useState<IFetchStateType<StateTypes>>({
     data: undefined,
     loading: false,
     error: undefined,
@@ -26,14 +21,22 @@ export default function useFetch<dataType>(
       );
       if (!response.ok) throw new Error(await response.text());
       const result = await response.json();
-      setState({ data: result, loading: false, error: undefined });
+
+      const obj = { data: result, loading: false, error: undefined };
+      setState(obj);
+      return obj;
     } catch (err: any) {
       console.error(err);
-      setState({ data: undefined, loading: false, error: err.message });
+
+      const obj = { data: undefined, loading: false, error: err.message };
+      setState(obj);
+      return obj;
     }
   };
   useEffect(() => {
-    if (!lazy) doFetch();
+    if (!lazy) {
+      doFetch();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

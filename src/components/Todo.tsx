@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from "react";
 import useFetch from "../hooks/Fetch";
 import { ITodo } from "../interfaces/Todo";
+import { IHandleRefetchTypes, IFetchStateType } from "../interfaces/Fetch";
 
 interface PropTypes {
   item: ITodo;
-  handleRefetch: () => Promise<void>;
+  handleRefetch: IHandleRefetchTypes;
+  handleEditedItem: (item: ITodo) => void;
+  handleDeletedItem: (item: ITodo) => void;
 }
-
-const Todo: React.FC<PropTypes> = ({ item, handleRefetch }: PropTypes) => {
+const Todo: React.FC<PropTypes> = ({
+  item,
+  handleRefetch,
+  handleEditedItem,
+  handleDeletedItem,
+}: PropTypes) => {
   const url = `todos/${item._id}`;
-  const mutation = useFetch(url, undefined, true);
+  const mutation = useFetch<IFetchStateType<ITodo>>(url, undefined, true);
   const { error, loading, doFetch } = mutation;
-
   const [checked, setChecked] = useState(!!item.completed);
   const [editMode, setEditMode] = useState(false);
   const [titleInput, setTitleInput] = useState(item.title || "");
@@ -23,7 +29,7 @@ const Todo: React.FC<PropTypes> = ({ item, handleRefetch }: PropTypes) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title: item.title, completed: !checked }),
     };
-    await doFetch(sendData);
+    doFetch(sendData);
   };
 
   const handleEdit = async (e: React.FormEvent) => {
@@ -33,17 +39,16 @@ const Todo: React.FC<PropTypes> = ({ item, handleRefetch }: PropTypes) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title: titleInput, completed: item.completed }),
     };
-    await doFetch(sendData);
-    setEditMode(false);
-    await handleRefetch();
+    const { data, error } = await doFetch(sendData);
+    if (data) handleEditedItem(data);
+    if (!error) setEditMode(false);
   };
-
   const handleDelete = async () => {
     const sendData = {
       method: "DELETE",
     };
-    await doFetch(sendData);
-    await handleRefetch();
+    const { data } = await doFetch(sendData);
+    if (data) handleDeletedItem(data);
   };
 
   // alert error

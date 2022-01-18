@@ -1,13 +1,19 @@
 import React, { useState } from "react";
 import Todo from "./Todo";
 import { ITodo } from "../interfaces/Todo";
+import { IHandleRefetchTypes, SetTodoType } from "../interfaces/Fetch";
 
 interface PropTypes {
   items: ITodo[];
-  handleRefetch: () => Promise<void>;
+  setItems: SetTodoType;
+  handleRefetch: IHandleRefetchTypes;
 }
 
-const Todos: React.FC<PropTypes> = ({ items, handleRefetch }: PropTypes) => {
+const Todos: React.FC<PropTypes> = ({
+  items,
+  handleRefetch,
+  setItems,
+}: PropTypes) => {
   const [filter, setfilter] = useState("");
 
   let filteredTodos = [];
@@ -21,6 +27,24 @@ const Todos: React.FC<PropTypes> = ({ items, handleRefetch }: PropTypes) => {
     default:
       filteredTodos = items;
   }
+
+  const handleEditedItem = (item: ITodo) => {
+    const index = items.findIndex((e: ITodo) => e._id === item._id);
+    setItems((oldItems) => {
+      const newObj = { ...oldItems };
+      if (newObj.data?.todos[index]) newObj.data.todos[index] = item;
+      return newObj;
+    });
+  };
+
+  const handleDeletedItem = (item: ITodo) => {
+    setItems((oldItems) => {
+      const newObj = { ...oldItems };
+      if (newObj.data?.todos)
+        newObj.data.todos = newObj.data.todos.filter((e) => e._id !== item._id);
+      return newObj;
+    });
+  };
 
   return (
     <div className="todoContainer w-100">
@@ -40,7 +64,13 @@ const Todos: React.FC<PropTypes> = ({ items, handleRefetch }: PropTypes) => {
       <ul className="todoWrap w-100">
         {filteredTodos?.length === 0 && <p className="p-2">Todo is empty.</p>}
         {filteredTodos.map((todo: ITodo) => (
-          <Todo handleRefetch={handleRefetch} key={todo._id} item={todo} />
+          <Todo
+            handleEditedItem={handleEditedItem}
+            handleDeletedItem={handleDeletedItem}
+            handleRefetch={handleRefetch}
+            key={todo._id}
+            item={todo}
+          />
         ))}
       </ul>
     </div>

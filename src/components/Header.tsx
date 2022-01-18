@@ -1,7 +1,8 @@
 import React from "react";
+import { IHandleRefetchTypes } from "../interfaces/Fetch";
 
 interface PropTypes {
-  handleRefetch: () => Promise<void>;
+  handleRefetch: IHandleRefetchTypes;
 }
 
 const Header: React.FC<PropTypes> = ({ handleRefetch }: PropTypes) => {
