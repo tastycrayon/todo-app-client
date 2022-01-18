@@ -6,14 +6,9 @@ import { IHandleRefetchTypes, SetTodoType } from "../interfaces/Fetch";
 interface PropTypes {
   items: ITodo[];
   setItems: SetTodoType;
-  handleRefetch: IHandleRefetchTypes;
 }
 
-const Todos: React.FC<PropTypes> = ({
-  items,
-  handleRefetch,
-  setItems,
-}: PropTypes) => {
+const Todos: React.FC<PropTypes> = ({ items, setItems }: PropTypes) => {
   const [filter, setfilter] = useState("");
 
   let filteredTodos = [];
@@ -67,7 +62,6 @@ const Todos: React.FC<PropTypes> = ({
           <Todo
             handleEditedItem={handleEditedItem}
             handleDeletedItem={handleDeletedItem}
-            handleRefetch={handleRefetch}
             key={todo._id}
             item={todo}
           />

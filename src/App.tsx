@@ -19,13 +19,9 @@ function App() {
         {error && <div>{JSON.stringify(error)}</div>}
         {loading && <Spinner />}
         {!loading && !error && data?.todos && (
-          <Todos
-            handleRefetch={refetchTodos}
-            items={data?.todos}
-            setItems={setData}
-          />
+          <Todos items={data?.todos} setItems={setData} />
         )}
-        <AddTodo handleRefetch={refetchTodos} disbaled={!!(loading || error)} />
+        <AddTodo setItems={setData} disabled={!!(loading || error)} />
       </>
     </Container>
   );

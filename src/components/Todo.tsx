@@ -5,13 +5,12 @@ import { IHandleRefetchTypes, IFetchStateType } from "../interfaces/Fetch";
 
 interface PropTypes {
   item: ITodo;
-  handleRefetch: IHandleRefetchTypes;
+
   handleEditedItem: (item: ITodo) => void;
   handleDeletedItem: (item: ITodo) => void;
 }
 const Todo: React.FC<PropTypes> = ({
   item,
-  handleRefetch,
   handleEditedItem,
   handleDeletedItem,
 }: PropTypes) => {

@@ -1,21 +1,27 @@
 import React, { useEffect, useState } from "react";
 import useFetch from "../hooks/Fetch";
-import { IHandleRefetchTypes } from "../interfaces/Fetch";
+import { SetTodoType } from "../interfaces/Fetch";
+import { ITodo } from "../interfaces/Todo";
 
 interface PropTypes {
-  disbaled: boolean;
-  handleRefetch: IHandleRefetchTypes;
+  disabled: boolean;
+  setItems: SetTodoType;
 }
 
-const AddTodo: React.FC<PropTypes> = ({
-  disbaled,
-  handleRefetch,
-}: PropTypes) => {
+const AddTodo: React.FC<PropTypes> = ({ disabled, setItems }: PropTypes) => {
   const url = "todos";
   const [inputVisibility, setInputVisibility] = useState(false);
   const [inputData, setInputData] = useState("");
   const mutation = useFetch(url, undefined, true);
   const { error, loading, doFetch } = mutation;
+
+  const handleAddNew = (item: ITodo) => {
+    setItems((oldItems) => {
+      const newObj = { ...oldItems };
+      if (newObj.data?.todos) newObj.data.todos.unshift(item);
+      return newObj;
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,10 +30,12 @@ const AddTodo: React.FC<PropTypes> = ({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title: inputData, completed: false }),
     };
-    await doFetch(sendData);
-    setInputVisibility(false);
-    setInputData("");
-    await handleRefetch();
+    const { data, error } = await doFetch(sendData);
+    if (data) handleAddNew(data);
+    if (!error) {
+      setInputVisibility(false);
+      setInputData("");
+    }
   };
 
   useEffect(() => {
@@ -64,7 +72,7 @@ const AddTodo: React.FC<PropTypes> = ({
         <button
           onClick={() => setInputVisibility(true)}
           type="button"
-          disabled={disbaled}
+          disabled={disabled}
           className="add-btn"
         >
           ＋ Add New Todo
