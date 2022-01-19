@@ -51,6 +51,7 @@ const AddTodo: React.FC<PropTypes> = ({ disabled, setItems }: PropTypes) => {
           <input
             type="text"
             value={inputData}
+            autoFocus
             onChange={(e) => setInputData(e.target.value)}
           />
           <div className="dFlex">
