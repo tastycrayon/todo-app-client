@@ -63,7 +63,6 @@ const Todo: React.FC<PropTypes> = ({
           <input
             type="checkbox"
             checked={checked}
-            autoFocus
             onChange={() => handleCheckBox()}
           />
           <span className="mark"></span>
@@ -72,6 +71,7 @@ const Todo: React.FC<PropTypes> = ({
           <input
             className="w-100 mr-1"
             value={titleInput}
+            autoFocus
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setTitleInput(e.target.value)
             }
