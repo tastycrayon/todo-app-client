@@ -9,7 +9,7 @@ interface PropTypes {
 }
 
 const Todos: React.FC<PropTypes> = ({ items, setItems }: PropTypes) => {
-  const [filter, setfilter] = useState("");
+  const [filter, setfilter] = useState<string>("");
 
   let filteredTodos = [];
   switch (filter) {

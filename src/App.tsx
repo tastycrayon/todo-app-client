@@ -16,7 +16,11 @@ function App() {
     <Container>
       <>
         <Header handleRefetch={refetchTodos} />
-        {error && <div>{JSON.stringify(error)}</div>}
+        {error && (
+          <div className="todoContainer w-100">
+            Error: {JSON.stringify(error)}
+          </div>
+        )}
         {loading && <Spinner />}
         {!loading && !error && data?.todos && (
           <Todos items={data?.todos} setItems={setData} />

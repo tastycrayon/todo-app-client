@@ -303,3 +303,7 @@ body {
   color: var(--btn-bg);
   background-color: #fff;
 }
+
+.border-bottom-rounded{
+  border-radius:0 0 1rem 1rem;
+}

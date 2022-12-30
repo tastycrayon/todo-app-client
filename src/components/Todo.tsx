@@ -17,9 +17,9 @@ const Todo: React.FC<PropTypes> = ({
   const url = `todos/${item._id}`;
   const mutation = useFetch<IFetchStateType<ITodo>>(url, undefined, true);
   const { error, loading, doFetch } = mutation;
-  const [checked, setChecked] = useState(!!item.completed);
-  const [editMode, setEditMode] = useState(false);
-  const [titleInput, setTitleInput] = useState(item.title || "");
+  const [checked, setChecked] = useState<boolean>(!!item.completed);
+  const [editMode, setEditMode] = useState<boolean>(false);
+  const [titleInput, setTitleInput] = useState<string>(item.title || "");
 
   const handleCheckBox = async () => {
     setChecked((prev) => !prev);
