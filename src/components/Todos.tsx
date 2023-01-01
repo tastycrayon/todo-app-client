@@ -48,7 +48,7 @@ const Todos: React.FC<PropTypes> = ({ data, setItems }: PropTypes) => {
 
   return (
     <div className="todoContainer w-100">
-      <div className="filterWrap hFlex p-1">
+      <div className="filterWrap hFlex p-1 pr-0">
         <span>Filter ({filteredTodos?.length || 0})</span>
         <select
           onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
