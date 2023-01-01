@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import useFetch from "../hooks/Fetch";
-import { SetTodoType } from "../interfaces/Fetch";
+import { SetTodosType } from "../interfaces/Fetch";
 import { ITodo } from "../interfaces/Todo";
 
 interface PropTypes {
   disabled: boolean;
-  setItems: SetTodoType;
+  setItems: SetTodosType;
 }
 
 const AddTodo: React.FC<PropTypes> = ({ disabled, setItems }: PropTypes) => {
   const url = "todos";
   const [inputVisibility, setInputVisibility] = useState(false);
   const [inputData, setInputData] = useState("");
-  const mutation = useFetch(url, undefined, true);
+  const mutation = useFetch<ITodo>(url, undefined, true);
   const { error, loading, doFetch } = mutation;
 
   const handleAddNew = (item: ITodo) => {
@@ -31,7 +31,7 @@ const AddTodo: React.FC<PropTypes> = ({ disabled, setItems }: PropTypes) => {
       body: JSON.stringify({ title: inputData, completed: false }),
     };
     const { data, error } = await doFetch(sendData);
-    if (data) handleAddNew(data);
+    if (data && !error) handleAddNew(data);
     if (!error) {
       setInputVisibility(false);
       setInputData("");
@@ -50,12 +50,18 @@ const AddTodo: React.FC<PropTypes> = ({ disabled, setItems }: PropTypes) => {
         >
           <input
             type="text"
+            disabled={loading}
             value={inputData}
             autoFocus
             onChange={(e) => setInputData(e.target.value)}
           />
           <div className="dFlex">
-            <button type="submit" className="icon-btn cFlex" title="Save">
+            <button
+              type="submit"
+              className="icon-btn cFlex"
+              title="Save"
+              disabled={loading}
+            >
               <img src="check.svg" alt="save" height="16px" width="16px" />
             </button>
             &nbsp;

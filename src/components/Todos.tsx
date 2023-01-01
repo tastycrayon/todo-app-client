@@ -1,25 +1,30 @@
 import React, { useState } from "react";
 import Todo from "./Todo";
 import { ITodo } from "../interfaces/Todo";
-import { IHandleRefetchTypes, SetTodoType } from "../interfaces/Fetch";
+import { IFetchAllDataTypes, SetTodosType } from "../interfaces/Fetch";
 
 interface PropTypes {
-  items: ITodo[];
-  setItems: SetTodoType;
+  data: IFetchAllDataTypes;
+  setItems: SetTodosType;
 }
 
-const Todos: React.FC<PropTypes> = ({ items, setItems }: PropTypes) => {
+const Todos: React.FC<PropTypes> = ({ data, setItems }: PropTypes) => {
   const [filter, setfilter] = useState<string>("");
+  let emptyMessage = "";
+  let filteredTodos: ITodo[] = [];
+  const items = data?.todos;
 
-  let filteredTodos = [];
   switch (filter) {
     case "1":
       filteredTodos = items.filter((todo) => todo.completed === true);
+      emptyMessage = "No incomplete todo.";
       break;
     case "0":
       filteredTodos = items.filter((todo) => todo.completed === false);
+      emptyMessage = "No todo to complete.";
       break;
     default:
+      emptyMessage = "Todo is empty.";
       filteredTodos = items;
   }
 
@@ -57,15 +62,17 @@ const Todos: React.FC<PropTypes> = ({ items, setItems }: PropTypes) => {
         </select>
       </div>
       <ul className="todoWrap w-100">
-        {filteredTodos?.length === 0 && <p className="p-2">Todo is empty.</p>}
-        {filteredTodos.map((todo: ITodo) => (
-          <Todo
-            handleEditedItem={handleEditedItem}
-            handleDeletedItem={handleDeletedItem}
-            key={todo._id}
-            item={todo}
-          />
-        ))}
+        {filteredTodos?.length === 0 && <p className="p-1">{emptyMessage}</p>}
+        {filteredTodos &&
+          filteredTodos.map((todo: ITodo) => (
+            <Todo
+              handleEditedItem={handleEditedItem}
+              handleDeletedItem={handleDeletedItem}
+              key={todo._id}
+              item={todo}
+              setItems={setItems}
+            />
+          ))}
       </ul>
     </div>
   );

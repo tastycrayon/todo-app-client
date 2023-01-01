@@ -20,7 +20,7 @@ export default function useFetch<StateTypes>(
         lazyData || data
       );
       if (!response.ok) throw new Error(await response.text());
-      const result = await response.json();
+      const result: StateTypes = await response.json();
 
       const obj = { data: result, loading: false, error: undefined };
       setState(obj);

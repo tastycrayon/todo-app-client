@@ -23,7 +23,7 @@ function App() {
         )}
         {loading && <Spinner />}
         {!loading && !error && data?.todos && (
-          <Todos items={data?.todos} setItems={setData} />
+          <Todos data={data} setItems={setData} />
         )}
         <AddTodo setItems={setData} disabled={!!(loading || error)} />
       </>

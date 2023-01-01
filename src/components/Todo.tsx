@@ -1,34 +1,45 @@
 import React, { useEffect, useState } from "react";
 import useFetch from "../hooks/Fetch";
 import { ITodo } from "../interfaces/Todo";
-import { IHandleRefetchTypes, IFetchStateType } from "../interfaces/Fetch";
+import { SetTodosType } from "../interfaces/Fetch";
 
 interface PropTypes {
   item: ITodo;
-
+  setItems: SetTodosType;
   handleEditedItem: (item: ITodo) => void;
   handleDeletedItem: (item: ITodo) => void;
 }
 const Todo: React.FC<PropTypes> = ({
   item,
+  setItems,
   handleEditedItem,
   handleDeletedItem,
 }: PropTypes) => {
   const url = `todos/${item._id}`;
-  const mutation = useFetch<IFetchStateType<ITodo>>(url, undefined, true);
+  const mutation = useFetch<ITodo>(url, undefined, true);
   const { error, loading, doFetch } = mutation;
-  const [checked, setChecked] = useState<boolean>(!!item.completed);
   const [editMode, setEditMode] = useState<boolean>(false);
   const [titleInput, setTitleInput] = useState<string>(item.title || "");
 
   const handleCheckBox = async () => {
-    setChecked((prev) => !prev);
     const sendData = {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: item.title, completed: !checked }),
+      body: JSON.stringify({ title: item.title, completed: !item.completed }),
     };
-    doFetch(sendData);
+    const { data, error } = await doFetch(sendData);
+    if (!error && data) {
+      setItems((oldItems) => {
+        const newObj = { ...oldItems };
+        if (!newObj.data?.todos) return newObj;
+        const index = newObj.data?.todos.findIndex(
+          (e: ITodo) => e._id === data._id
+        );
+        if (index === -1) return newObj;
+        newObj.data.todos[index] = data;
+        return newObj;
+      });
+    }
   };
 
   const handleEdit = async (e: React.FormEvent) => {
@@ -62,13 +73,15 @@ const Todo: React.FC<PropTypes> = ({
           {!editMode && <span>{item.title}</span>}
           <input
             type="checkbox"
-            checked={checked}
+            disabled={loading}
+            checked={item.completed}
             onChange={() => handleCheckBox()}
           />
           <span className="mark"></span>
         </label>
         {editMode && (
           <input
+            type="text"
             className="w-100 mr-1"
             value={titleInput}
             autoFocus

@@ -16,7 +16,7 @@ export type IHandleRefetchTypes = () => Promise<
   IFetchStateType<IFetchAllDataTypes>
 >;
 
-export type SetTodoType = React.Dispatch<
+export type SetTodosType = React.Dispatch<
   React.SetStateAction<IFetchStateType<IFetchAllDataTypes>>
 >;
 
