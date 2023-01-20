@@ -117,7 +117,12 @@ body {
 .form-label input:checked ~ .mark {
   background-color: var(--todo-check-color);
 }
-
+.form-label span{
+    max-width: 28rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 /* Create the mark/indicator (hidden when not checked) */
 .mark:after {
   content: "";
