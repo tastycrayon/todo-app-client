@@ -355,3 +355,19 @@ select {
 ::-webkit-scrollbar-thumb:hover {
   background-color: var(--primary);
 }
+
+
+/* responsive */
+@media (max-width: 768px) {
+  body, #root {
+    display: block;
+  }
+  .header, .todoContainer {
+      border-radius: 0;
+  }
+  .todoWrap {
+    max-height: calc( 100vh - 130px);
+  }
+}
+  
+ 
